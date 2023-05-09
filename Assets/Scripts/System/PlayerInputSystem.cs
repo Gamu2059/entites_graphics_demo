@@ -12,16 +12,13 @@ namespace Gamu2059.EntitiesGraphicsDemo
     [UpdateInGroup(typeof(SimulationSystemGroup), OrderFirst = true)]
     public partial class PlayerInputSystem : SystemBase
     {
-        private bool _initialized;
         private InputActionSettings _inputActionSettings;
         private InputAction _moveInputAction;
 
         protected override void OnCreate()
         {
-            _initialized = false;
             if (SystemAPI.HasSingleton<PlayerInputData>()) return;
 
-            _initialized = true;
             _inputActionSettings = new InputActionSettings();
             _inputActionSettings.Enable();
             _moveInputAction = _inputActionSettings.Player.Move;
@@ -32,8 +29,6 @@ namespace Gamu2059.EntitiesGraphicsDemo
 
         protected override void OnDestroy()
         {
-            if (!_initialized) return;
-
             var entity = SystemAPI.GetSingletonEntity<PlayerInputData>();
             EntityManager.DestroyEntity(entity);
 
@@ -45,7 +40,6 @@ namespace Gamu2059.EntitiesGraphicsDemo
 
         protected override void OnUpdate()
         {
-            if (!_initialized) return;
             if (!SystemAPI.HasSingleton<PlayerInputData>()) return;
 
             var playerInputData = SystemAPI.GetSingleton<PlayerInputData>();
